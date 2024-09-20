@@ -1,8 +1,3 @@
-export AWS_ACCESS_KEY_ID='your-access-key-id'
-export AWS_SECRET_ACCESS_KEY='your-secret-access-key'
-docker-compose up --build
-
-
 import sys
 from awsglue.transforms import *
 from awsglue.utils import getResolvedOptions
@@ -47,6 +42,19 @@ transformed_dynamic_frame = redshift_dynamic_frame.select_fields(["mpg", "cylind
 
 # Logging to verify MySQL write operation
 print("Writing transformed data to MySQL")
-MySQL_node1726835098466 = glueContext.write_dynamic_frame.from_options(frame=transformed_dynamic_frame, connection_type="mysql", connection_options={"url": "jdbc:mysql://database-1.c5eeyay2kmws.ap-south-1.rds.amazonaws.com:3306/infra", "dbtable": "car_data", "user": "admin", "password": "admin2024"}, transformation_ctx="MySQL_node1726835098466")
+mysql_write_options = {
+    "url": "jdbc:mysql://database-1.c5eeyay2kmws.ap-south-1.rds.amazonaws.com:3306/infra",
+    "dbtable": "car_data",
+    "user": "admin",
+    "password": "admin2024",
+    "preactions": """
+        CREATE TABLE IF NOT EXISTS car_data (
+            mpg DOUBLE PRECISION,
+            cylinders BIGINT,
+            carname VARCHAR(255)
+        );
+    """
+}
+MySQL_node1726835098466 = glueContext.write_dynamic_frame.from_options(frame=transformed_dynamic_frame, connection_type="mysql", connection_options=mysql_write_options, transformation_ctx="MySQL_node1726835098466")
 
 job.commit()
