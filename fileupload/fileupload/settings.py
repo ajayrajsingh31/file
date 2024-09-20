@@ -59,7 +59,7 @@ secrets = get_secret()
 # AWS integration of S3
 AWS_ACCESS_KEY_ID = secrets['AWS_ACCESS_KEY_ID']
 AWS_SECRET_ACCESS_KEY = secrets['AWS_SECRET_ACCESS_KEY']
-AWS_STORAGE_BUCKET_NAME = 's3-destination-bucket-prj'
+AWS_STORAGE_BUCKET_NAME = 's3-ajay-bucket'
 AWS_S3_FILE_OVERWRITE = False
 AWS_S3_REGION_NAME = 'ap-south-1'
 AWS_S3_SIGNATURE_VERSION = 's3v4'
